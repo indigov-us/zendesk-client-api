@@ -1,0 +1,14 @@
+{
+  "name": "zendesk-client-api",
+  "version": "1.0.0",
+  "description": "Indigov Zendesk Client API",
+  "main": "lib/index.js",
+  "scripts": {
+    "build": "rm -rf ./lib && tsc",
+    "prepare": "yarn build"
+  },
+  "author": "Indigov",
+  "license": "ISC",
+  "devDependencies": {},
+  "dependencies": {}
+}
