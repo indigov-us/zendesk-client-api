@@ -11,4 +11,6 @@ Then instantiate new client:
 
 ```typescript
 const zdClient = new ZendeskClientApi((window as any).Indigov.ZAFClient)
+
+zdClient.getTriggers().then((response: Zendesk.ITriggerList) => setTriggers(response.triggers))
 ```
