@@ -48,8 +48,6 @@ export class ZendeskClientApi {
   private async setFetchCredentials(): Promise<IFetchCredentials> {
     if (this.fetchCredentials) return this.fetchCredentials
 
-    console.log('sssset it')
-    
     const metadata = await this.client.metadata()
     const context = await this.client.context()
 
