@@ -10,5 +10,16 @@
   "author": "Indigov",
   "license": "ISC",
   "devDependencies": {},
-  "dependencies": {}
+  "dependencies": {},
+  "directories": {
+    "lib": "lib"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/indigov-us/zendesk-client-api.git"
+  },
+  "bugs": {
+    "url": "https://github.com/indigov-us/zendesk-client-api/issues"
+  },
+  "homepage": "https://github.com/indigov-us/zendesk-client-api#readme"
 }
