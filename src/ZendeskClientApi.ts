@@ -4,6 +4,7 @@ export interface IFetchCredentials {
   subdomain: string
   token: string
   url: string
+  ticket_field_title: string
 }
 
 interface IRequestHeaders {
@@ -28,19 +29,38 @@ export class ZendeskClientApi {
   // call client.function for every request.
   private fetchCredentials!: IFetchCredentials
 
-  constructor(private client: Indigov.IZAFClient) {
-    this.setFetchCredentials()
-  }
+  constructor(private client: any) {}
 
   public async getTriggers(): Promise<Zendesk.ITriggerList> {
+    await this.setFetchCredentials()
+
     return await this._request({
       path: '/triggers',
       type: EMethodsTypes.GET
     })
   }
 
+  public async getTicketFields(): Promise<any> {
+    await this.setFetchCredentials()
+
+    const data = await this._request({
+      path: '/ticket_fields',
+      type: EMethodsTypes.GET
+    })
+    const topicsField = data.ticket_fields.find(
+      (f: any) => f.title === this.fetchCredentials.ticket_field_title
+    )
+
+    return {
+      fields: topicsField.custom_field_options,
+      id: topicsField.id
+    }
+  }
+
   // This is a quick method to test with
   public async getResponses(): Promise<any> {
+    await this.setFetchCredentials()
+
     return await this._request({
       path: '/ticket_fields',
       type: EMethodsTypes.GET
@@ -48,16 +68,17 @@ export class ZendeskClientApi {
   }
 
   private async setFetchCredentials(): Promise<IFetchCredentials> {
-    if (this.fetchCredentials) return this.fetchCredentials
-
-    const metadata = await this.client.metadata()
     const context = await this.client.context()
+    const metadata = await this.client.metadata()
 
-    return (this.fetchCredentials = {
+    this.fetchCredentials = {
       subdomain: context.account.subdomain,
       token: metadata.settings.proxy_token,
-      url: metadata.settings.proxy_url
-    })
+      url: metadata.settings.proxy_url,
+      ticket_field_title: metadata.settings.ticket_field_title
+    }
+
+    return this.fetchCredentials
   }
 
   private async _request({ path, type, data }: IRequestOptions): Promise<any> {

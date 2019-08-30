@@ -16,18 +16,33 @@ var EMethodsTypes;
 class ZendeskClientApi {
     constructor(client) {
         this.client = client;
-        this.setFetchCredentials();
     }
     getTriggers() {
         return __awaiter(this, void 0, void 0, function* () {
+            yield this.setFetchCredentials();
             return yield this._request({
                 path: '/triggers',
                 type: EMethodsTypes.GET
             });
         });
     }
+    getTicketFields() {
+        return __awaiter(this, void 0, void 0, function* () {
+            yield this.setFetchCredentials();
+            const data = yield this._request({
+                path: '/ticket_fields',
+                type: EMethodsTypes.GET
+            });
+            const topicsField = data.ticket_fields.find((f) => f.title === this.fetchCredentials.ticket_field_title);
+            return {
+                fields: topicsField.custom_field_options,
+                id: topicsField.id
+            };
+        });
+    }
     getResponses() {
         return __awaiter(this, void 0, void 0, function* () {
+            yield this.setFetchCredentials();
             return yield this._request({
                 path: '/ticket_fields',
                 type: EMethodsTypes.GET
@@ -36,15 +51,15 @@ class ZendeskClientApi {
     }
     setFetchCredentials() {
         return __awaiter(this, void 0, void 0, function* () {
-            if (this.fetchCredentials)
-                return this.fetchCredentials;
-            const metadata = yield this.client.metadata();
             const context = yield this.client.context();
-            return (this.fetchCredentials = {
+            const metadata = yield this.client.metadata();
+            this.fetchCredentials = {
                 subdomain: context.account.subdomain,
                 token: metadata.settings.proxy_token,
-                url: metadata.settings.proxy_url
-            });
+                url: metadata.settings.proxy_url,
+                ticket_field_title: metadata.settings.ticket_field_title
+            };
+            return this.fetchCredentials;
         });
     }
     _request({ path, type, data }) {
