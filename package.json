@@ -4,7 +4,7 @@
   "description": "Indigov Zendesk Client API",
   "main": "dist/index.js",
   "scripts": {
-    "build": "rm -rf ./lib && tsc",
+    "build": "rm -rf ./dist && tsc",
     "prepare": "yarn build"
   },
   "typings": "./dist/index.d.ts",

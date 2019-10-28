@@ -16,6 +16,7 @@ declare module Indigov {
         proxy_token: string
         proxy_url: string
         ticket_field_title: string
+        user_county_field_id: string
       }
     }>
     request: (
