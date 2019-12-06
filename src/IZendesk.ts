@@ -37,7 +37,11 @@ export interface ICustomUserField {
     home_address_county: string
     home_address_precinct: string
     home_address_phone: string
+    no_mail_flag?: boolean
+    no_bulk_mail_flag?: boolean
+    household_flag?: boolean
     salutation?: string
+    last_bulk_mailer_sent_on?: string
   }
 }
 

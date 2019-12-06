@@ -30,6 +30,10 @@ class ZendeskClientApi {
         await this.getParamaters();
         return this.paramaters.user_county_field_id.split(', ');
     }
+    async getZipCodes() {
+        await this.getParamaters();
+        return this.paramaters.zip_codes.split(',');
+    }
     async getTicketFields() {
         await this.getParamaters();
         const data = await this._request({
@@ -59,22 +63,18 @@ class ZendeskClientApi {
         let count = 1;
         do {
             const res = await this.client.request(url);
-            console.log('Indigov: res.users', res.users);
             const userIds = res.users
                 .map((user) => {
                 return user.id;
             })
                 .join(',');
-            console.log('Indigov: userIds', userIds);
             if (res.users.length) {
                 const delRes = await this.client.request({
                     type: 'DELETE',
                     url: `/api/v2/users/destroy_many.json?ids=${userIds}`
                 });
-                console.log('Indigov: delRes', delRes);
             }
             url = res.next_page;
-            console.log('Indigov: count++', count++);
         } while (url);
     }
     async getParamaters() {
@@ -86,7 +86,8 @@ class ZendeskClientApi {
             url: metadata.settings.proxy_url,
             ticket_field_title: metadata.settings.ticket_field_title,
             user_county_field_id: metadata.settings.user_county_field_id,
-            L2BlackoutEnabled: metadata.settings.L2BlackoutEnabled
+            L2BlackoutEnabled: metadata.settings.L2BlackoutEnabled,
+            zip_codes: metadata.settings.zip_codes
         };
         return this.paramaters;
     }
@@ -106,9 +107,7 @@ class ZendeskClientApi {
             type: type || EMethodsTypes.GET,
             url
         })
-            .catch(e => {
-            console.error(e);
-        });
+            .catch(e => { });
     }
 }
 exports.ZendeskClientApi = ZendeskClientApi;

@@ -6,6 +6,7 @@ export interface IParamaters {
     ticket_field_title: string;
     user_county_field_id: string;
     L2BlackoutEnabled: boolean;
+    zip_codes: string;
 }
 export declare class ZendeskClientApi {
     private client;
@@ -14,6 +15,7 @@ export declare class ZendeskClientApi {
     getTriggers(): Promise<Zendesk.ITriggerList>;
     private extractCategoriesFromCustomFields;
     getCounties(): Promise<any>;
+    getZipCodes(): Promise<any>;
     getTicketFields(): Promise<any>;
     getResponses(): Promise<any>;
     isL2BlackoutEnabled(): Promise<boolean>;

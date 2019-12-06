@@ -7,6 +7,7 @@ export interface IParamaters {
   ticket_field_title: string
   user_county_field_id: string
   L2BlackoutEnabled: boolean
+  zip_codes: string
 }
 
 interface IRequestHeaders {
@@ -63,6 +64,11 @@ export class ZendeskClientApi {
     return this.paramaters.user_county_field_id.split(', ')
   }
 
+  public async getZipCodes(): Promise<any> {
+    await this.getParamaters()
+    return this.paramaters.zip_codes.split(',')
+  }
+
   public async getTicketFields(): Promise<any> {
     await this.getParamaters()
     const data = await this._request({
@@ -101,23 +107,20 @@ export class ZendeskClientApi {
     do {
       const res: any = await this.client.request(url)
 
-      console.log('Indigov: res.users', res.users)
       const userIds = res.users
         .map((user: any) => {
           return user.id
         })
         .join(',')
-      console.log('Indigov: userIds', userIds)
+
       if (res.users.length) {
         const delRes = await this.client.request({
           type: 'DELETE',
           url: `/api/v2/users/destroy_many.json?ids=${userIds}`
         })
-        console.log('Indigov: delRes', delRes)
       }
 
       url = res.next_page
-      console.log('Indigov: count++', count++)
     } while (url)
   }
 
@@ -131,7 +134,8 @@ export class ZendeskClientApi {
       url: metadata.settings.proxy_url,
       ticket_field_title: metadata.settings.ticket_field_title,
       user_county_field_id: metadata.settings.user_county_field_id,
-      L2BlackoutEnabled: metadata.settings.L2BlackoutEnabled
+      L2BlackoutEnabled: metadata.settings.L2BlackoutEnabled,
+      zip_codes: metadata.settings.zip_codes
     }
 
     return this.paramaters
@@ -154,8 +158,6 @@ export class ZendeskClientApi {
         type: type || EMethodsTypes.GET,
         url
       })
-      .catch(e => {
-        console.error(e)
-      })
+      .catch(e => {})
   }
 }
