@@ -10,7 +10,9 @@
   "typings": "./dist/index.d.ts",
   "author": "Indigov",
   "license": "ISC",
-  "devDependencies": {},
+  "devDependencies": {
+    "typescript": "^3.7.4"
+  },
   "dependencies": {},
   "directories": {
     "lib": "lib"
